@@ -10,36 +10,52 @@
     "email": null,
     "website": "www.mennica.com.pl/produkty-na-zamowienie/pieczecie"
   },
-  "fields": [
+  "items": [
     {
       "field_id": "data",
-      "section": null,
+      "section": "header",
       "label": "data",
-      "cell_coord": "R3C14",
-      "type": "text",
-      "value": null
+      "is_field": true,
+      "modifiable": true,
+      "type": "date",
+      "value": null,
+      "auto_fill": "current_date"
+    },
+    {
+      "field_id": "specyfikacja_zamówienia",
+      "section": "specyfikacja zamówienia",
+      "label": "specyfikacja zamówienia",
+      "is_field": false,
+      "modifiable": false,
+      "type": "section_header",
+      "value": "specyfikacja zamówienia"
     },
     {
       "field_id": "standardowy_45_dni_roboczych",
       "section": "specyfikacja zamówienia",
       "label": "standardowy (45 dni roboczych)",
-      "cell_coord": "R11C5",
+      "is_field": true,
+      "modifiable": true,
       "type": "checkbox",
-      "value": false
+      "value": false,
+      "note": "wypełnic drukowanymi literami"
     },
     {
       "field_id": "ekspresowy_7_dni_roboczych",
       "section": "specyfikacja zamówienia",
       "label": "ekspresowy (7 dni roboczych)",
-      "cell_coord": "R11C12",
+      "is_field": true,
+      "modifiable": true,
       "type": "checkbox",
-      "value": false
+      "value": false,
+      "note": "wypełnic drukowanymi literami"
     },
     {
       "field_id": "treśc_pieczęci",
       "section": "specyfikacja zamówienia",
       "label": "treśc pieczęci",
-      "cell_coord": "R15C5",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null,
       "template": "………………...………………………(imię i nazwisko) - tłumacz przysięgły języka ………………… nr TP/…..…./……"
@@ -48,14 +64,35 @@
       "field_id": "rodzaj_pieczęci",
       "section": "specyfikacja zamówienia",
       "label": "rodzaj pieczęci",
-      "type": "static_or_option",
+      "is_field": true,
+      "modifiable": false,
+      "type": "static_value",
       "value": "pieczęć do tuszu, fi 36 mm, bez godła, dla tłumacza"
+    },
+    {
+      "field_id": "dane_do_faktury",
+      "section": "dane do faktury",
+      "label": "dane do faktury",
+      "is_field": false,
+      "modifiable": false,
+      "type": "section_header",
+      "value": "dane do faktury"
+    },
+    {
+      "field_id": "nabywca_płatnik",
+      "section": "nabywca (płatnik)",
+      "label": "nabywca (płatnik)",
+      "is_field": false,
+      "modifiable": false,
+      "type": "section_header",
+      "value": "nabywca (płatnik)"
     },
     {
       "field_id": "nazwa",
       "section": "nabywca (płatnik)",
       "label": "nazwa",
-      "cell_coord": "R25C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
@@ -63,7 +100,8 @@
       "field_id": "ulica_i_nr",
       "section": "nabywca (płatnik)",
       "label": "ulica i nr",
-      "cell_coord": "R27C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
@@ -71,7 +109,8 @@
       "field_id": "kod_poczt_i_miejscowość",
       "section": "nabywca (płatnik)",
       "label": "kod poczt. i miejscowość",
-      "cell_coord": "R28C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
@@ -79,39 +118,57 @@
       "field_id": "nip",
       "section": "nabywca (płatnik)",
       "label": "NIP*",
-      "cell_coord": "R29C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
-      "value": null
+      "value": null,
+      "note": "w przypadku braku nr NIP wystawiana jest faktura/paragon bez możliwości późniejszej zmiany"
     },
     {
       "field_id": "prowadzę_działalnośc_gospodarczą",
       "section": "nabywca (płatnik)",
       "label": "prowadzę działalnośc gospodarczą",
-      "cell_coord": "R31C5",
+      "is_field": true,
+      "modifiable": true,
       "type": "checkbox",
-      "value": false
+      "value": false,
+      "note": "w przypadku braku nr NIP wystawiana jest faktura/paragon bez możliwości późniejszej zmiany"
     },
     {
       "field_id": "nie_prowadzę_działalności_gospodarczej",
       "section": "nabywca (płatnik)",
       "label": "nie prowadzę działalności gospodarczej",
-      "cell_coord": "R32C5",
+      "is_field": true,
+      "modifiable": true,
       "type": "checkbox",
-      "value": false
+      "value": false,
+      "note": "w przypadku braku nr NIP wystawiana jest faktura/paragon bez możliwości późniejszej zmiany"
     },
     {
       "field_id": "jestem_zobowiązany_do_posługiwania_się_nr_nip_na_podstawie_o",
       "section": "nabywca (płatnik)",
       "label": "jestem zobowiązany do posługiwania się nr NIP na podstawie odrębnych przepisów",
-      "cell_coord": "R33C5",
+      "is_field": true,
+      "modifiable": true,
       "type": "checkbox",
-      "value": false
+      "value": false,
+      "note": "w przypadku braku nr NIP wystawiana jest faktura/paragon bez możliwości późniejszej zmiany"
+    },
+    {
+      "field_id": "odbiorca_adres_do_wysyłki",
+      "section": "odbiorca (adres do wysyłki)",
+      "label": "odbiorca (adres do wysyłki)",
+      "is_field": false,
+      "modifiable": false,
+      "type": "section_header",
+      "value": "odbiorca (adres do wysyłki)"
     },
     {
       "field_id": "nazwa",
       "section": "odbiorca (adres do wysyłki)",
       "label": "nazwa",
-      "cell_coord": "R38C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
@@ -119,7 +176,8 @@
       "field_id": "ulica_i_nr",
       "section": "odbiorca (adres do wysyłki)",
       "label": "ulica i nr",
-      "cell_coord": "R40C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
@@ -127,7 +185,8 @@
       "field_id": "kod_poczt_i_miejscowość",
       "section": "odbiorca (adres do wysyłki)",
       "label": "kod poczt. i miejscowość",
-      "cell_coord": "R41C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
@@ -135,7 +194,8 @@
       "field_id": "nr_tel_komórkowego",
       "section": "odbiorca (adres do wysyłki)",
       "label": "nr tel. (komórkowego)",
-      "cell_coord": "R42C7",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
@@ -143,7 +203,8 @@
       "field_id": "podpis_zamawiającego",
       "section": "odbiorca (adres do wysyłki)",
       "label": "podpis zamawiającego",
-      "cell_coord": "R44C11",
+      "is_field": true,
+      "modifiable": true,
       "type": "signature",
       "value": null
     },
@@ -151,7 +212,8 @@
       "field_id": "podpis_i_pieczęć_właściwego_organu_nadrzędnego",
       "section": "odbiorca (adres do wysyłki)",
       "label": "podpis i pieczęć właściwego organu nadrzędnego",
-      "cell_coord": "R47C11",
+      "is_field": true,
+      "modifiable": true,
       "type": "signature",
       "value": null
     }

@@ -3,73 +3,133 @@
   "format": "rtf",
   "form_title": "Wniosek o dokonanie  zmian w danych  osobowych tłumacza przysięgłego",
   "bureau_info": null,
-  "fields": [
+  "items": [
     {
       "field_id": "data",
+      "section": null,
       "label": "data",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
     {
       "field_id": "w_związku_ze_zmianą",
+      "section": null,
       "label": "W związku ze zmianą",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null,
       "description": "/nazwiska, adresu, inne / (prosimy wypełnić drukowanymi literami)"
     },
     {
+      "field_id": "proszę_o_dokonanie_korekty_danych_w_karcie_rejestrowej_tłuma",
+      "section": null,
+      "label": "proszę o dokonanie korekty danych w karcie rejestrowej tłumacza przysięgłego.",
+      "is_field": false,
+      "modifiable": false,
+      "type": "static_text",
+      "value": "proszę o dokonanie korekty danych w karcie rejestrowej tłumacza przysięgłego."
+    },
+    {
       "field_id": "nr_tp",
+      "section": null,
       "label": "Nr TP",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
     {
+      "field_id": "aktualne_dane",
+      "section": "Aktualne dane",
+      "label": "Aktualne dane",
+      "is_field": false,
+      "modifiable": false,
+      "type": "section_header",
+      "value": "Aktualne dane :"
+    },
+    {
       "field_id": "imię_imiona",
+      "section": "Aktualne dane",
       "label": "Imię /imiona/",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
     {
       "field_id": "nazwisko",
+      "section": "Aktualne dane",
       "label": "Nazwisko",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
     {
       "field_id": "adres_zamieszkania",
+      "section": "Aktualne dane",
       "label": "Adres  zamieszkania",
+      "is_field": true,
+      "modifiable": true,
       "type": "multiline_text",
       "value": null
     },
     {
       "field_id": "województwo",
+      "section": "Aktualne dane",
       "label": "Województwo",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
     {
       "field_id": "adres_do_korespondencji",
+      "section": "Aktualne dane",
       "label": "Adres do korespondencji",
+      "is_field": true,
+      "modifiable": true,
       "type": "multiline_text",
       "value": null
     },
     {
       "field_id": "województwo",
+      "section": "Aktualne dane",
       "label": "Województwo",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
     {
       "field_id": "tel_faks_email_proszę_zaznaczyć_czy_mają_być_opublikowane",
+      "section": "Aktualne dane",
       "label": "tel. /faks, e–mail (proszę zaznaczyć czy mają być opublikowane)",
+      "is_field": true,
+      "modifiable": true,
       "type": "text",
       "value": null
     },
     {
       "field_id": "inne",
+      "section": "Aktualne dane",
       "label": "inne",
+      "is_field": true,
+      "modifiable": true,
       "type": "multiline_text",
       "value": null
+    },
+    {
+      "field_id": "podpis",
+      "section": "Aktualne dane",
+      "label": "/podpis/",
+      "is_field": false,
+      "modifiable": false,
+      "type": "static_text",
+      "value": "/podpis/"
     }
   ],
   "notes": [
