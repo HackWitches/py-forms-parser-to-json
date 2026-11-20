@@ -4,12 +4,14 @@ import re
 def _decode_shifted_glyphs(text: str) -> str:
     """
     Decodes Polish government PDFs whose embedded subset fonts emit raw glyph IDs
-    shifted by -29 (e.g., '\\x03' -> ' ', '\\x0b' -> '(', '\\x0c' -> ')', '1D]ZLVNR' -> 'Nazwisko').
+    shifted by -29, while preserving standard ASCII space (0x20 = 32) used in
+    justified lines.
     """
     high_glyph_map = {
         121: "ó",
         171: ".",
         177: "–",
+        193: "„",
         207: "Ó",
         222: "Ł",
         225: "ł",
@@ -22,6 +24,7 @@ def _decode_shifted_glyphs(text: str) -> str:
         276: "ń",
         286: "ś",
         298: "ż",
+        312: "”",
     }
 
     out = []
@@ -29,7 +32,7 @@ def _decode_shifted_glyphs(text: str) -> str:
         code = ord(ch)
         if code in high_glyph_map:
             out.append(high_glyph_map[code])
-        elif code == 3:
+        elif code in (3, 32):
             out.append(" ")
         elif 4 <= code <= 226:
             shifted = code + 29
@@ -45,12 +48,25 @@ def _decode_shifted_glyphs(text: str) -> str:
     return "".join(out)
 
 
+def _looks_like_shifted_stream(text: str) -> bool:
+    """
+    Detects -29 glyph-shifted strings both with spaces ('\\x03') and single-word
+    spans without spaces (e.g., 'ZQLRVNRGDZF\\\\' -> 'wnioskodawcy', '1D]ZLVNR' -> 'Nazwisko').
+    """
+    if "\x03" in text or any(1 <= ord(c) <= 31 and c not in "\r\n\t" for c in text):
+        return True
+    # Single-word shifted tokens contain uppercase runs mixed with ']', '\\', '^', or leading digits
+    if re.search(r"[A-Z]{3,}[\\\]\^]|[\\\]\^][A-Z]{2,}|^1[A-Z\]]{4,}", text.strip()):
+        return True
+    return False
+
+
 def normalize_polish_pdf_text(text: str) -> str:
     """
     Must be called on raw span text BEFORE whitespace collapsing so that
     0x0B ('(') and 0x0C (')') are not eaten by .split().
     """
-    if "\x03" in text or any(1 <= ord(c) <= 31 and c not in "\r\n\t" for c in text):
+    if _looks_like_shifted_stream(text):
         text = _decode_shifted_glyphs(text)
 
     # Collapse spaced-out single capital letters like "W Z ě R" -> "WZÓR"
@@ -76,6 +92,8 @@ def normalize_polish_pdf_text(text: str) -> str:
         "¶": "ś",
         "¼": "ź",
         "¿": "ż",
+        "Ĩ": "ź",
+        "ĝ": "Ś",
         "³": "ł",
         "£": "Ł",
         "ê": "ę",
@@ -84,6 +102,8 @@ def normalize_polish_pdf_text(text: str) -> str:
         "Ñ": "Ń",
         "æ": "ć",
         "Æ": "Ć",
+        "á": "„",
+        "Ń": "”",
     }
     for bad, good in char_fixes.items():
         text = text.replace(bad, good)
@@ -93,15 +113,30 @@ def normalize_polish_pdf_text(text: str) -> str:
 
 def split_label_and_footnote(raw_label: str) -> tuple[str, str | None]:
     """
-    Separates trailing superscript footnote markers like 'Nazwa państwa wnioskodawcy3)'
-    into ('Nazwa państwa wnioskodawcy', '3').
+    Separates superscript footnote markers like 'Nazwa państwa wnioskodawcy3)'
+    or 'Pełnomocnik w Rzeczypospolitej Polskiej 7) do doręczeń...' into clean text + '7'.
     """
     cleaned = " ".join(raw_label.split()).strip()
-    m = re.search(r"(?<=[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\)\]])\s*(\d+)\)\s*$", cleaned)
-    if m:
-        fn_id = m.group(1)
-        cleaned = cleaned[: m.start()].rstrip(" :").strip()
+
+    # 1. Trailing footnote marker at end of string
+    m_end = re.search(r"(?<=[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\)\]])\s*(\d+)\)\s*$", cleaned)
+    if m_end:
+        fn_id = m_end.group(1)
+        cleaned = cleaned[: m_end.start()].rstrip(" :").strip()
         return cleaned, fn_id
+
+    # 2. Inline superscript marker inside a multi-line wrapped label (e.g. "...Polskiej 7) do doręczeń...")
+    m_mid = re.search(r"(?<=[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ])\s+(\d+)\)\s+(?=[a-ząćęłńóśźż])", cleaned)
+    if m_mid:
+        fn_id = m_mid.group(1)
+        cleaned = (cleaned[: m_mid.start()] + " " + cleaned[m_mid.end() :]).rstrip(" :").strip()
+        return cleaned, fn_id
+
+    # 3. Guard against superscript marker sorted ahead of a non-numbered label
+    m_start = re.match(r"^(\d+)\)\s+([A-ZĄĆĘŁŃÓŚŹŻ].+)$", cleaned)
+    if m_start:
+        return m_start.group(2).rstrip(" :").strip(), m_start.group(1)
+
     return cleaned.rstrip(":").strip(), None
 
 
