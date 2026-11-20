@@ -1,0 +1,163 @@
+{
+  "source_file": "wniosek_o_wyrobienie_pieczęci.xls",
+  "format": "xls",
+  "form_title": "Zamówienie na pieczęcie",
+  "bureau_info": {
+    "bureau": null,
+    "address": null,
+    "phone": null,
+    "fax": null,
+    "email": null,
+    "website": "www.mennica.com.pl/produkty-na-zamowienie/pieczecie"
+  },
+  "fields": [
+    {
+      "field_id": "data",
+      "section": null,
+      "label": "data",
+      "cell_coord": "R3C14",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "standardowy_45_dni_roboczych",
+      "section": "specyfikacja zamówienia",
+      "label": "standardowy (45 dni roboczych)",
+      "cell_coord": "R11C5",
+      "type": "checkbox",
+      "value": false
+    },
+    {
+      "field_id": "ekspresowy_7_dni_roboczych",
+      "section": "specyfikacja zamówienia",
+      "label": "ekspresowy (7 dni roboczych)",
+      "cell_coord": "R11C12",
+      "type": "checkbox",
+      "value": false
+    },
+    {
+      "field_id": "treśc_pieczęci",
+      "section": "specyfikacja zamówienia",
+      "label": "treśc pieczęci",
+      "cell_coord": "R15C5",
+      "type": "text",
+      "value": null,
+      "template": "………………...………………………(imię i nazwisko) - tłumacz przysięgły języka ………………… nr TP/…..…./……"
+    },
+    {
+      "field_id": "rodzaj_pieczęci",
+      "section": "specyfikacja zamówienia",
+      "label": "rodzaj pieczęci",
+      "type": "static_or_option",
+      "value": "pieczęć do tuszu, fi 36 mm, bez godła, dla tłumacza"
+    },
+    {
+      "field_id": "nazwa",
+      "section": "nabywca (płatnik)",
+      "label": "nazwa",
+      "cell_coord": "R25C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "ulica_i_nr",
+      "section": "nabywca (płatnik)",
+      "label": "ulica i nr",
+      "cell_coord": "R27C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "kod_poczt_i_miejscowość",
+      "section": "nabywca (płatnik)",
+      "label": "kod poczt. i miejscowość",
+      "cell_coord": "R28C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nip",
+      "section": "nabywca (płatnik)",
+      "label": "NIP*",
+      "cell_coord": "R29C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "prowadzę_działalnośc_gospodarczą",
+      "section": "nabywca (płatnik)",
+      "label": "prowadzę działalnośc gospodarczą",
+      "cell_coord": "R31C5",
+      "type": "checkbox",
+      "value": false
+    },
+    {
+      "field_id": "nie_prowadzę_działalności_gospodarczej",
+      "section": "nabywca (płatnik)",
+      "label": "nie prowadzę działalności gospodarczej",
+      "cell_coord": "R32C5",
+      "type": "checkbox",
+      "value": false
+    },
+    {
+      "field_id": "jestem_zobowiązany_do_posługiwania_się_nr_nip_na_podstawie_o",
+      "section": "nabywca (płatnik)",
+      "label": "jestem zobowiązany do posługiwania się nr NIP na podstawie odrębnych przepisów",
+      "cell_coord": "R33C5",
+      "type": "checkbox",
+      "value": false
+    },
+    {
+      "field_id": "nazwa",
+      "section": "odbiorca (adres do wysyłki)",
+      "label": "nazwa",
+      "cell_coord": "R38C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "ulica_i_nr",
+      "section": "odbiorca (adres do wysyłki)",
+      "label": "ulica i nr",
+      "cell_coord": "R40C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "kod_poczt_i_miejscowość",
+      "section": "odbiorca (adres do wysyłki)",
+      "label": "kod poczt. i miejscowość",
+      "cell_coord": "R41C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nr_tel_komórkowego",
+      "section": "odbiorca (adres do wysyłki)",
+      "label": "nr tel. (komórkowego)",
+      "cell_coord": "R42C7",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "podpis_zamawiającego",
+      "section": "odbiorca (adres do wysyłki)",
+      "label": "podpis zamawiającego",
+      "cell_coord": "R44C11",
+      "type": "signature",
+      "value": null
+    },
+    {
+      "field_id": "podpis_i_pieczęć_właściwego_organu_nadrzędnego",
+      "section": "odbiorca (adres do wysyłki)",
+      "label": "podpis i pieczęć właściwego organu nadrzędnego",
+      "cell_coord": "R47C11",
+      "type": "signature",
+      "value": null
+    }
+  ],
+  "notes": [
+    "wypełnic drukowanymi literami",
+    "w przypadku braku nr NIP wystawiana jest faktura/paragon bez możliwości późniejszej zmiany"
+  ]
+}

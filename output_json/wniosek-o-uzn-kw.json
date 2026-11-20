@@ -1,0 +1,301 @@
+{
+  "source_file": "wniosek-o-uzn-kw.pdf",
+  "format": "pdf",
+  "form_title": "W Z ě R WNIOSEK o uznanie kwalifikacji zawodowych do wykonywania zawodu regulowanego w Rzeczypospolitej Polskiej",
+  "bureau_info": {
+    "bureau": "Ministerstwo Nauki i Szkolnictwa Wyższego",
+    "address": "ul. Hoża 20, 00-529 Warszawa",
+    "phone": "(+48 22) 52 92 266",
+    "fax": "(+48 22) 50 17 130",
+    "email": "kwalifikacje@nauka.gov.pl",
+    "website": "www.nauka.gov.pl"
+  },
+  "fields": [
+    {
+      "field_id": "pan",
+      "section": null,
+      "label": "Pan",
+      "type": "checkbox",
+      "value": false
+    },
+    {
+      "field_id": "pan",
+      "section": null,
+      "label": "Pan",
+      "type": "checkbox",
+      "value": false
+    },
+    {
+      "field_id": "imię_imiona",
+      "section": null,
+      "subsection": null,
+      "label": "Imię (imiona)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwisko",
+      "section": null,
+      "subsection": null,
+      "label": "Nazwisko",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwisko_rodowe",
+      "section": null,
+      "subsection": null,
+      "label": "Nazwisko rodowe",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "data_urodzenia",
+      "section": null,
+      "subsection": null,
+      "label": "Data urodzenia",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "miejsce_urodzenia_państwo_miejscowość",
+      "section": null,
+      "subsection": null,
+      "label": "Miejsce urodzenia (państwo, miejscowość)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "obywatelstwo_nazwa_państwa_wnioskodawcy",
+      "section": null,
+      "subsection": null,
+      "label": "Obywatelstwo Nazwa państwa wnioskodawcy",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "numer_telefonu_z_numerami_kierunkowymi_numer_faksu_z_numeram",
+      "section": null,
+      "subsection": null,
+      "label": "Numer telefonu (z numerami kierunkowymi) Numer faksu (z numerami kierunkowymi)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "peţnomocnik_do_prowadzenia_sprawy_imię_nazwisko_adres",
+      "section": null,
+      "subsection": null,
+      "label": "Peţnomocnik do prowadzenia sprawy (imię, nazwisko, adres)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "peţnomocnik_w_rzeczypospolitej_polskiej_do_doręczeń_imię_naz",
+      "section": null,
+      "subsection": null,
+      "label": "Peţnomocnik w Rzeczypospolitej Polskiej do doręczeń (imię, nazwisko, adres)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_zawodu_regulowanego_do_wykonywania_ktrego_mają_być_uzn",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa zawodu regulowanego, do wykonywania kt–rego mają być uznane kwalifikacje zawodowe Nazwa specjalności lub stanowiska",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_ukończonej_szkoţy_wydziaţ_kierunek_specjalność",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa ukończonej szkoţy (wydziaţ, kierunek, specjalność)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_dokumentu_potwierdzającego_wyksztaţcenie_data_i_miejsc",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa dokumentu potwierdzającego wyksztaţcenie, data i miejsce wystawienia (państwo, miejscowość)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "uzyskany_tytuţ_w_języku_polskim_i_w_oryginalnym_brzmieniu",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Uzyskany tytuţ (w języku polskim i w oryginalnym brzmieniu)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "okres_ksztaţcenia_zgodnie_z_programem",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Okres ksztaţcenia zgodnie z programem",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "inne_informacje",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Inne informacje",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_ukończonego_kursu_albo_szkolenia",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa ukończonego kursu albo szkolenia",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_instytucji_ktra_wydaţa_dokument_potwierdzający_ukończe",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa instytucji, kt–ra wydaţa dokument potwierdzający ukończenie kursu albo szkolenia",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "miejsce_kursu_albo_szkolenia_państwo_miejscowość_rodzaj_kurs",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Miejsce kursu albo szkolenia (państwo, miejscowość) Rodzaj kursu albo szkolenia",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "czas_trwania_lub_wymiar_godzin_kursu_albo_szkolenia",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Czas trwania lub wymiar godzin kursu albo szkolenia",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_dokumentu_potwierdzającego_ukończenie_kursu_albo_szkol",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa dokumentu potwierdzającego ukończenie kursu albo szkolenia, data i miejsce wystawienia (państwo, miejscowość)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_pracodawcy_albo_zleceniodawcy_państwo_miejscowość",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa pracodawcy albo zleceniodawcy, państwo, miejscowość",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "rodzaj_stosunku_prawnego_ţączącego_wnioskodawcę_z_pracodawcą",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Rodzaj stosunku prawnego ţączącego wnioskodawcę z pracodawcą albo zleceniodawcą",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "okres_zatrudnienia_albo_czas_trwania_innej_umowy",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Okres zatrudnienia albo czas trwania innej umowy",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "wymiar_czasu_pracy",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Wymiar czasu pracy",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_wykonywanego_zawodu_lub_zajmowanego_stanowiska_w_język",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa wykonywanego zawodu lub zajmowanego stanowiska (w języku polskim i w oryginalnym brzmieniu)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_podmiotu_ktry_potwierdziţ_kwalifikacje_zawodowe_lub_up",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa podmiotu, kt–ry potwierdziţ kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu w państwie wnioskodawcy (w języku polskim i w oryginalnym brzmieniu)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "państwo",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Państwo",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "miejscowość",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Miejscowość",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "data",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Data",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwa_dokumentu_potwierdzającego_kwalifikacje_zawodowe_lub_u",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Nazwa dokumentu potwierdzającego kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu w państwie wnioskodawcy",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "państwo",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Państwo",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "miejscowość",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Miejscowość",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "data",
+      "section": "IV. Kwalifikacje zawodowe lub uprawnienia do wykonywania zawodu:9)",
+      "subsection": null,
+      "label": "Data",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "lp_nazwa_dokumentu",
+      "section": "V. Wykaz dokument–w doţączonych do wniosku:14)",
+      "subsection": null,
+      "label": "Lp. Nazwa dokumentu",
+      "type": "text",
+      "value": null
+    }
+  ]
+}

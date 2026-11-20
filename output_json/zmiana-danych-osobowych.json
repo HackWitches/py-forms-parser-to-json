@@ -1,0 +1,78 @@
+{
+  "source_file": "zmiana-danych-osobowych.rtf",
+  "format": "rtf",
+  "form_title": "Wniosek o dokonanie  zmian w danych  osobowych tłumacza przysięgłego",
+  "bureau_info": null,
+  "fields": [
+    {
+      "field_id": "data",
+      "label": "data",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "w_związku_ze_zmianą",
+      "label": "W związku ze zmianą",
+      "type": "text",
+      "value": null,
+      "description": "/nazwiska, adresu, inne / (prosimy wypełnić drukowanymi literami)"
+    },
+    {
+      "field_id": "nr_tp",
+      "label": "Nr TP",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "imię_imiona",
+      "label": "Imię /imiona/",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwisko",
+      "label": "Nazwisko",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "adres_zamieszkania",
+      "label": "Adres  zamieszkania",
+      "type": "multiline_text",
+      "value": null
+    },
+    {
+      "field_id": "województwo",
+      "label": "Województwo",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "adres_do_korespondencji",
+      "label": "Adres do korespondencji",
+      "type": "multiline_text",
+      "value": null
+    },
+    {
+      "field_id": "województwo",
+      "label": "Województwo",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "tel_faks_email_proszę_zaznaczyć_czy_mają_być_opublikowane",
+      "label": "tel. /faks, e–mail (proszę zaznaczyć czy mają być opublikowane)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "inne",
+      "label": "inne",
+      "type": "multiline_text",
+      "value": null
+    }
+  ],
+  "notes": [
+    "Załącznik: w przypadku zmiany nazwiska oryginał lub poświadczona notarialnie kopia skróconego odpisu aktu małżeństwa bądź decyzji Urzędu Stanu Cywilnego."
+  ]
+}
