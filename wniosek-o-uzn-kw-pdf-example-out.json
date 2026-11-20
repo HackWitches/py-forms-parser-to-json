@@ -1,0 +1,36 @@
+{
+  "source_file": "wniosek-o-uzn-kw.pdf",
+  "format": "pdf",
+  "form_title": "WNIOSEK o uznanie kwalifikacji zawodowych do wykonywania zawodu regulowanego w Rzeczypospolitej Polskiej",
+  "bureau_info": {
+    "bureau": "Ministerstwo Nauki i Szkolnictwa Wyższego",
+    "address": "ul. Hoża 20, 00-529 Warszawa",
+    "phone": "(+48 22) 52 92 266",
+    "fax": "(+48 22) 50 17 130",
+    "email": "kwalifikacje@nauka.gov.pl",
+    "website": "www.nauka.gov.pl"
+  },
+  "fields": [
+    {
+      "field_id": "pan_pani",
+      "section": "I. Dane wnioskodawcy",
+      "label": "Pan Pani",
+      "type": "checkbox",
+      "value": null
+    },
+    {
+      "field_id": "imię_imiona",
+      "section": "I. Dane wnioskodawcy",
+      "label": "Imię (imiona)",
+      "type": "text",
+      "value": null
+    },
+    {
+      "field_id": "nazwisko",
+      "section": "I. Dane wnioskodawcy",
+      "label": "Nazwisko",
+      "type": "text",
+      "value": null
+    }
+  ]
+}
