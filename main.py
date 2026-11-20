@@ -7,15 +7,14 @@ from parsers.xls_parser import parse_xls
 
 
 def route_parser(file_path: Path) -> dict:
-    """Dispatches a file to its corresponding format parser."""
     ext = file_path.suffix.lower()
     if ext == ".pdf":
         return parse_pdf(file_path)
     if ext == ".rtf":
         return parse_rtf(file_path)
-    if ext == ".xls":
+    if ext in {".xls", ".xlsx"}:
         return parse_xls(file_path)
-    raise ValueError(f"Unsupported extension: {ext}")
+    raise ValueError(f"Unsupported file format: {ext}")
 
 
 def main():
@@ -28,9 +27,9 @@ def main():
 
     for file_path in files:
         try:
-            parsed_data = route_parser(file_path)
-            out_file = write_output(output_dir, file_path.name, parsed_data)
-            print(f"[OK] {file_path.name} -> {out_file.name} ({len(parsed_data['fields'])} fields)")
+            parsed = route_parser(file_path)
+            out_path = write_output(output_dir, file_path.name, parsed)
+            print(f"[OK] {file_path.name} -> {out_path.name} ({len(parsed['fields'])} fields)")
         except Exception as e:
             print(f"[ERROR] Failed to parse {file_path.name}: {e}")
 
