@@ -11,7 +11,7 @@ def parse_rtf(file_path: Path) -> dict:
     raw_rtf = raw_bytes.decode(encoding, errors="replace")
     plain_text = rtf_to_text(raw_rtf)
 
-    # 1. Extract centered + bold title from raw RTF paragraphs
+    # 1. Detect centered + bold title
     paragraphs = re.split(r"\\par\b", raw_rtf)
     title_parts = []
     for p in paragraphs[:15]:
@@ -35,13 +35,14 @@ def parse_rtf(file_path: Path) -> dict:
                 title = f"{line} {nxt}".strip()
                 break
 
-    # Match both ASCII dots (....) and Unicode ellipsis (……)
     dots_only_re = re.compile(r"^[.\u2026\s]{4,}$")
     label_dots_re = re.compile(r"^(.+?)\s*:?\s*[.\u2026]{4,}\s*$")
     sub_desc_re = re.compile(r"^(/.*?/|\(.*?\))$")
+    footnote_re = re.compile(r"^(\*|\d+\)|-)\s*(.+)$")
 
-    fields = []
+    items = []
     notes = []
+    current_section = None
     i = 0
 
     while i < len(lines):
@@ -60,25 +61,26 @@ def parse_rtf(file_path: Path) -> dict:
                 multiline = True
                 i += 1
 
-            # Capture italic /slash/ or (parenthetical) description lines below the dots
             descriptions = []
             while i + 1 < len(lines) and sub_desc_re.match(lines[i + 1]):
                 desc_line = lines[i + 1].strip()
-                # Do not swallow "/podpis/" if it belongs to a signature line
                 if "podpis" in desc_line.lower():
                     break
                 descriptions.append(desc_line)
                 i += 1
 
-            field_obj = {
+            entry = {
                 "field_id": slugify(label),
+                "section": current_section,
                 "label": label,
+                "is_field": True,
+                "modifiable": True,
                 "type": "multiline_text" if multiline else "text",
                 "value": None,
             }
             if descriptions:
-                field_obj["description"] = " ".join(descriptions)
-            fields.append(field_obj)
+                entry["description"] = " ".join(descriptions)
+            items.append(entry)
             i += 1
             continue
 
@@ -88,38 +90,63 @@ def parse_rtf(file_path: Path) -> dict:
             i += 1
             while i + 1 < len(lines) and dots_only_re.match(lines[i + 1]):
                 i += 1
+
             descriptions = []
             while i + 1 < len(lines) and sub_desc_re.match(lines[i + 1]):
                 descriptions.append(lines[i + 1].strip())
                 i += 1
 
-            field_obj = {
+            entry = {
                 "field_id": slugify(label),
+                "section": current_section,
                 "label": label,
+                "is_field": True,
+                "modifiable": True,
                 "type": "text",
                 "value": None,
             }
             if descriptions:
-                field_obj["description"] = " ".join(descriptions)
-            fields.append(field_obj)
+                entry["description"] = " ".join(descriptions)
+            items.append(entry)
             i += 1
             continue
 
         # Case C: Standalone signature dots above "/podpis/"
         if dots_only_re.match(line):
             if i + 1 < len(lines) and "podpis" in lines[i + 1].lower():
-                fields.append({
+                items.append({
                     "field_id": "podpis",
+                    "section": current_section,
                     "label": lines[i + 1].strip("/ "),
+                    "is_field": True,
+                    "modifiable": True,
                     "type": "signature",
                     "value": None,
                 })
                 i += 2
                 continue
 
-        if line.startswith("- "):
-            notes.append(line[2:].strip())
+        # Case D: Footnote / general form note
+        fn = footnote_re.match(line)
+        if fn:
+            note_text = fn.group(2).strip()
+            notes.append(note_text)
+            i += 1
+            continue
 
+        # Case E: Non-input section header or static paragraph (is_field = False)
+        clean_header = line.rstrip(":").strip()
+        if line.endswith(":"):
+            current_section = clean_header
+        items.append({
+            "field_id": slugify(clean_header),
+            "section": current_section,
+            "label": clean_header,
+            "is_field": False,
+            "modifiable": False,
+            "type": "section_header" if line.endswith(":") else "static_text",
+            "value": line,
+        })
         i += 1
 
     return {
@@ -127,6 +154,6 @@ def parse_rtf(file_path: Path) -> dict:
         "format": "rtf",
         "form_title": title,
         "bureau_info": extract_bureau_info(plain_text),
-        "fields": fields,
+        "items": items,
         "notes": notes,
     }

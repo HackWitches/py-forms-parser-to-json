@@ -5,10 +5,27 @@ from extractors import extract_bureau_info, slugify
 
 
 def parse_xls(file_path: Path) -> dict:
-    """Dispatches .xls (xlrd) or .xlsx (openpyxl)."""
     if file_path.suffix.lower() == ".xlsx":
         return _parse_xlsx(file_path)
     return _parse_legacy_xls(file_path)
+
+
+def _attach_note_to_preceding_group(items: list[dict], note_text: str) -> bool:
+    """
+    Attaches a footnote starting with '*' or '1)' to the immediately preceding
+    block of checkboxes or asterisk-marked fields. Returns True if attached.
+    """
+    attached = False
+    for entry in reversed(items):
+        if not entry.get("is_field"):
+            break
+        if entry.get("type") == "checkbox" or "*" in entry.get("label", ""):
+            existing = entry.get("note")
+            entry["note"] = f"{existing} | {note_text}" if existing else note_text
+            attached = True
+        elif attached:
+            break
+    return attached
 
 
 def _parse_legacy_xls(file_path: Path) -> dict:
@@ -30,9 +47,13 @@ def _parse_legacy_xls(file_path: Path) -> dict:
         xf = wb.xf_list[sheet.cell_xf_index(r, c)]
         return wb.font_list[xf.font_index].bold == 1
 
+    def cell_is_italic(r: int, c: int) -> bool:
+        xf = wb.xf_list[sheet.cell_xf_index(r, c)]
+        return wb.font_list[xf.font_index].italic == 1
+
     title = None
     current_section = None
-    fields = []
+    items = []
     notes = []
     all_lines = []
     consumed_cells = set()
@@ -55,9 +76,13 @@ def _parse_legacy_xls(file_path: Path) -> dict:
                 title = clean_val
                 continue
 
-            # 2. Bold section headers along the left margin
-            if cell_is_bold(r, c) and c <= 3:
-                current_section = clean_val.rstrip(":")
+            # 2. Asterisk / italic footnote directly under checkboxes or fields
+            if clean_val.startswith("*") or (cell_is_italic(r, c) and re.match(r"^(\*|\d+\))", clean_val)):
+                note_txt = clean_val.lstrip("* ").strip()
+                if len(note_txt) > 3:
+                    notes.append(note_txt)
+                    _attach_note_to_preceding_group(items, note_txt)
+                consumed_cells.add((r, c))
                 continue
 
             # 3. Single-cell square checkbox immediately to the left of text (c - 1)
@@ -67,85 +92,118 @@ def _parse_legacy_xls(file_path: Path) -> dict:
                 and cell_has_full_box(r, c - 1)
                 and (r, c - 1) not in merged_map
             ):
-                fields.append({
+                items.append({
                     "field_id": slugify(clean_val),
                     "section": current_section,
                     "label": clean_val,
-                    "cell_coord": f"R{r+1}C{c}",
+                    "is_field": True,
+                    "modifiable": True,
                     "type": "checkbox",
                     "value": False,
                 })
                 consumed_cells.add((r, c))
                 continue
 
-            # 4. Scan to the right for a bordered empty box or dotted template box
+            # 4. Scan to the right for a bordered box (empty, dotted template, OR pre-filled static value like '*1*')
             target_box = None
             for scan_c in range(c + 1, sheet.ncols):
                 scan_val = sheet.cell_value(r, scan_c)
                 if (r, scan_c) in merged_map:
                     rlo, rhi, clo, chi = merged_map[(r, scan_c)]
                     top_left = sheet.cell_value(rlo, clo)
-                    if cell_has_full_box(rlo, clo) and (top_left == "" or "…" in str(top_left) or ".." in str(top_left)):
-                        target_box = (rlo, clo, top_left if top_left != "" else None)
+                    if cell_has_full_box(rlo, clo):
+                        target_box = (rlo, clo, top_left)
                         consumed_cells.add((rlo, clo))
                         break
-                elif scan_val == "" and cell_has_full_box(r, scan_c):
-                    target_box = (r, scan_c, None)
+                elif cell_has_full_box(r, scan_c):
+                    target_box = (r, scan_c, scan_val)
+                    consumed_cells.add((r, scan_c))
                     break
                 elif isinstance(scan_val, str) and scan_val.strip():
                     break
 
-            if target_box:
-                tr, tc, template_val = target_box
+            if target_box is not None:
+                _, _, box_raw_val = target_box
+                box_str = " ".join(str(box_raw_val).split()) if box_raw_val not in ("", None) else ""
                 label = clean_val.rstrip(":")
-                field_obj = {
-                    "field_id": slugify(label),
-                    "section": current_section,
-                    "label": label,
-                    "cell_coord": f"R{tr+1}C{tc+1}",
-                    "type": "text",
-                    "value": None,
-                }
-                if template_val:
-                    field_obj["template"] = " ".join(str(template_val).split())
-                fields.append(field_obj)
+
+                # Check if the box is empty or dotted template -> modifiable=True
+                if box_str == "" or "…" in box_str or ".." in box_str:
+                    entry = {
+                        "field_id": slugify(label),
+                        "section": current_section,
+                        "label": label,
+                        "is_field": True,
+                        "modifiable": True,
+                        "type": "text",
+                        "value": None,
+                    }
+                    if box_str:
+                        entry["template"] = box_str
+                else:
+                    # Pre-filled bordered box (e.g., wyróżnik: "*1*") -> modifiable=False
+                    entry = {
+                        "field_id": slugify(label),
+                        "section": current_section,
+                        "label": label,
+                        "is_field": True,
+                        "modifiable": False,
+                        "type": "text",
+                        "value": box_str,
+                    }
+
+                items.append(entry)
                 consumed_cells.add((r, c))
                 continue
 
             # 5. Signature box directly ABOVE the label
             if r >= 1 and cell_has_full_box(r - 1, c) and sheet.cell_value(r - 1, c) == "":
-                fields.append({
+                items.append({
                     "field_id": slugify(clean_val),
                     "section": current_section,
                     "label": clean_val,
-                    "cell_coord": f"R{r}C{c+1}",
+                    "is_field": True,
+                    "modifiable": True,
                     "type": "signature",
                     "value": None,
                 })
                 consumed_cells.add((r, c))
                 continue
 
-            # 6. Label with static/option text directly below it
+            # 6. Bold section header along the left margin (kept with is_field=False)
+            if cell_is_bold(r, c) and c <= 3:
+                sec_name = clean_val.rstrip(":")
+                current_section = sec_name
+                items.append({
+                    "field_id": slugify(sec_name),
+                    "section": current_section,
+                    "label": sec_name,
+                    "is_field": False,
+                    "modifiable": False,
+                    "type": "section_header",
+                    "value": clean_val,
+                })
+                consumed_cells.add((r, c))
+                continue
+
+            # 7. Label with static/pre-defined value directly below it (e.g., rodzaj pieczęci)
             if r + 1 < sheet.nrows and c <= 3:
                 below_val = sheet.cell_value(r + 1, c)
                 if isinstance(below_val, str) and below_val.strip() and not cell_is_bold(r + 1, c):
                     has_right_box = any(cell_has_full_box(r + 1, sc) for sc in range(c + 1, sheet.ncols))
                     if not has_right_box:
-                        fields.append({
-                            "field_id": slugify(clean_val),
+                        label = clean_val.rstrip(":")
+                        items.append({
+                            "field_id": slugify(label),
                             "section": current_section,
-                            "label": clean_val.rstrip(":"),
-                            "type": "static_or_option",
+                            "label": label,
+                            "is_field": True,
+                            "modifiable": False,
+                            "type": "static_value",
                             "value": " ".join(below_val.split()),
                         })
                         consumed_cells.update({(r, c), (r + 1, c)})
                         continue
-
-            # 7. Footnotes / instructions starting with "*"
-            if clean_val.startswith("*"):
-                note_txt = clean_val.lstrip("* ").strip()
-                if len(note_txt) > 3:
-                    notes.append(note_txt)
 
         if row_texts:
             all_lines.append(" ".join(row_texts))
@@ -155,23 +213,27 @@ def _parse_legacy_xls(file_path: Path) -> dict:
         "format": "xls",
         "form_title": title,
         "bureau_info": extract_bureau_info("\n".join(all_lines)),
-        "fields": fields,
+        "items": items,
         "notes": notes,
     }
 
 
 def _parse_xlsx(file_path: Path) -> dict:
-    """Modern .xlsx equivalent using openpyxl border & merge inspection."""
+    """Modern .xlsx parser matching the exact same schema."""
     wb = openpyxl.load_workbook(file_path, data_only=False)
     sheet = wb.active
 
     def has_box(cell) -> bool:
         b = cell.border
-        return bool(b and b.top and b.top.style and b.bottom and b.bottom.style and b.left and b.left.style and b.right and b.right.style)
+        return bool(
+            b and b.top and b.top.style and b.bottom and b.bottom.style
+            and b.left and b.left.style and b.right and b.right.style
+        )
 
     title = None
     current_section = None
-    fields = []
+    items = []
+    notes = []
     all_lines = []
 
     for r in range(1, sheet.max_row + 1):
@@ -186,31 +248,56 @@ def _parse_xlsx(file_path: Path) -> dict:
             if title is None and r < 15 and cell.font and cell.font.bold and c >= 4:
                 title = clean_val
                 continue
-            if cell.font and cell.font.bold and c <= 3:
-                current_section = clean_val.rstrip(":")
+
+            if clean_val.startswith("*"):
+                note_txt = clean_val.lstrip("* ").strip()
+                notes.append(note_txt)
+                _attach_note_to_preceding_group(items, note_txt)
                 continue
+
             if c > 1 and sheet.cell(r, c - 1).value is None and has_box(sheet.cell(r, c - 1)):
-                fields.append({
+                items.append({
                     "field_id": slugify(clean_val),
                     "section": current_section,
                     "label": clean_val,
-                    "cell_coord": sheet.cell(r, c - 1).coordinate,
+                    "is_field": True,
+                    "modifiable": True,
                     "type": "checkbox",
                     "value": False,
                 })
                 continue
+
+            found_box = False
             for sc in range(c + 1, sheet.max_column + 1):
                 target = sheet.cell(r, sc)
-                if target.value is None and has_box(target):
-                    fields.append({
+                if has_box(target):
+                    box_str = " ".join(str(target.value).split()) if target.value not in ("", None) else ""
+                    is_empty_or_dots = box_str == "" or "…" in box_str or ".." in box_str
+                    items.append({
                         "field_id": slugify(clean_val.rstrip(":")),
                         "section": current_section,
                         "label": clean_val.rstrip(":"),
-                        "cell_coord": target.coordinate,
+                        "is_field": True,
+                        "modifiable": is_empty_or_dots,
                         "type": "text",
-                        "value": None,
+                        "value": None if is_empty_or_dots else box_str,
                     })
+                    found_box = True
                     break
+
+            if not found_box and cell.font and cell.font.bold and c <= 3:
+                sec_name = clean_val.rstrip(":")
+                current_section = sec_name
+                items.append({
+                    "field_id": slugify(sec_name),
+                    "section": current_section,
+                    "label": sec_name,
+                    "is_field": False,
+                    "modifiable": False,
+                    "type": "section_header",
+                    "value": clean_val,
+                })
+
         if row_texts:
             all_lines.append(" ".join(row_texts))
 
@@ -219,6 +306,6 @@ def _parse_xlsx(file_path: Path) -> dict:
         "format": "xlsx",
         "form_title": title,
         "bureau_info": extract_bureau_info("\n".join(all_lines)),
-        "fields": fields,
-        "notes": [],
+        "items": items,
+        "notes": notes,
     }
