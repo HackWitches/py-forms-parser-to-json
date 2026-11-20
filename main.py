@@ -29,9 +29,11 @@ def main():
         try:
             parsed = route_parser(file_path)
             out_path = write_output(output_dir, file_path.name, parsed)
-            print(f"[OK] {file_path.name} -> {out_path.name} ({len(parsed['fields'])} fields)")
+            items = parsed.get("items", [])
+            field_count = sum(1 for item in items if item.get("is_field"))
+            print(f"[OK] {file_path.name} -> {out_path.name} ({field_count} fields, {len(items)} total items)")
         except Exception as e:
-            print(f"[ERROR] Failed to parse {file_path.name}: {e}")
+            print(f"[ERROR] {file_path.name}: {e}")
 
 
 if __name__ == "__main__":

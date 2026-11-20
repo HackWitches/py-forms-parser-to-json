@@ -1,32 +1,71 @@
 import re
 
 
+def _decode_shifted_glyphs(text: str) -> str:
+    """
+    Decodes Polish government PDFs whose embedded subset fonts emit raw glyph IDs
+    shifted by -29 (e.g., '\\x03' -> ' ', '\\x0b' -> '(', '\\x0c' -> ')', '1D]ZLVNR' -> 'Nazwisko').
+    """
+    high_glyph_map = {
+        121: "ó",
+        171: ".",
+        177: "–",
+        207: "Ó",
+        222: "Ł",
+        225: "ł",
+        238: "Ż",
+        243: "Ź",
+        248: "Ś",
+        252: "ć",
+        261: "ą",
+        266: "ę",
+        276: "ń",
+        286: "ś",
+        298: "ż",
+    }
+
+    out = []
+    for ch in text:
+        code = ord(ch)
+        if code in high_glyph_map:
+            out.append(high_glyph_map[code])
+        elif code == 3:
+            out.append(" ")
+        elif 4 <= code <= 226:
+            shifted = code + 29
+            if 32 <= shifted <= 255:
+                try:
+                    out.append(bytes([shifted]).decode("cp1250"))
+                    continue
+                except Exception:
+                    pass
+            out.append(ch)
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
 def normalize_polish_pdf_text(text: str) -> str:
     """
-    Fixes corrupted Polish glyphs produced by broken ToUnicode CMaps in
-    Polish government PDFs (e.g., 'W Z ě R' -> 'WZÓR', 'szkoţy' -> 'szkoły').
+    Must be called on raw span text BEFORE whitespace collapsing so that
+    0x0B ('(') and 0x0C (')') are not eaten by .split().
     """
-    # Collapse spaced-out single capital letters like "W Z ě R" -> "WZěR"
+    if "\x03" in text or any(1 <= ord(c) <= 31 and c not in "\r\n\t" for c in text):
+        text = _decode_shifted_glyphs(text)
+
+    # Collapse spaced-out single capital letters like "W Z ě R" -> "WZÓR"
     text = re.sub(
         r"\b([A-ZĄĆĘŁŃÓŚŹŻěţ])\s+(?=[A-ZĄĆĘŁŃÓŚŹŻěţ]\b)",
         r"\1",
         text,
     )
 
-    # Map common Windows-1250 / ISO-8859-2 cross-decoding artifacts
     char_fixes = {
         "ě": "Ó",
         "ţ": "ł",
         "Ţ": "Ł",
         "ď": "ó",
         "ŕ": "ó",
-        "ą": "ą",
-        "ę": "ę",
-        "ś": "ś",
-        "ć": "ć",
-        "ń": "ń",
-        "ź": "ź",
-        "ż": "ż",
         "Ľ": "Ż",
         "ť": "ł",
         "ˇ": "Ą",
@@ -52,9 +91,23 @@ def normalize_polish_pdf_text(text: str) -> str:
     return text
 
 
+def split_label_and_footnote(raw_label: str) -> tuple[str, str | None]:
+    """
+    Separates trailing superscript footnote markers like 'Nazwa państwa wnioskodawcy3)'
+    into ('Nazwa państwa wnioskodawcy', '3').
+    """
+    cleaned = " ".join(raw_label.split()).strip()
+    m = re.search(r"(?<=[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\)\]])\s*(\d+)\)\s*$", cleaned)
+    if m:
+        fn_id = m.group(1)
+        cleaned = cleaned[: m.start()].rstrip(" :").strip()
+        return cleaned, fn_id
+    return cleaned.rstrip(":").strip(), None
+
+
 def slugify(text: str) -> str:
     """Generates a clean snake_case identifier from a label."""
-    text = re.sub(r"\d+\)$", "", text.strip())
+    text, _ = split_label_and_footnote(text)
     text = re.sub(r"[^\w\s-]", "", text.lower())
     return re.sub(r"[-\s]+", "_", text).strip("_")[:60]
 

@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 import xlrd
 import openpyxl
@@ -127,24 +128,34 @@ def _parse_legacy_xls(file_path: Path) -> dict:
                 box_str = " ".join(str(box_raw_val).split()) if box_raw_val not in ("", None) else ""
                 label = clean_val.rstrip(":")
 
+                is_top_right_date = (
+                        label.lower() == "data"
+                        and r < 12
+                        and c >= 6
+                        and current_section is None
+                )
+                section_name = "header" if is_top_right_date else current_section
+
                 # Check if the box is empty or dotted template -> modifiable=True
                 if box_str == "" or "…" in box_str or ".." in box_str:
                     entry = {
                         "field_id": slugify(label),
-                        "section": current_section,
+                        "section": section_name,
                         "label": label,
                         "is_field": True,
                         "modifiable": True,
-                        "type": "text",
+                        "type": "date" if is_top_right_date else "text",
                         "value": None,
                     }
                     if box_str:
                         entry["template"] = box_str
+                    if is_top_right_date:
+                        entry["auto_fill"] = "current_date"
                 else:
                     # Pre-filled bordered box (e.g., wyróżnik: "*1*") -> modifiable=False
                     entry = {
                         "field_id": slugify(label),
-                        "section": current_section,
+                        "section": section_name,
                         "label": label,
                         "is_field": True,
                         "modifiable": False,
